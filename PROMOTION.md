@@ -225,10 +225,73 @@ GitHub: https://github.com/2165187809-AXE/clawdfolio
 
 ---
 
+## LinkedIn 帖子 (英文 - 专业版)
+
+```
+🚀 Excited to announce my latest open-source project: Clawdfolio
+
+As someone passionate about both software engineering and quantitative investing, I built Clawdfolio - an AI-powered portfolio monitoring tool that integrates natively with Claude Code.
+
+🎯 What problem does it solve?
+
+Managing portfolios across multiple brokers while tracking institutional-grade risk metrics is challenging. Existing tools are either too expensive or lack AI integration.
+
+💡 Key Features:
+• Multi-broker aggregation (Longport, Moomoo/Futu)
+• Professional risk analytics: VaR, Sharpe Ratio, Beta, Max Drawdown
+• Technical indicators: RSI, Bollinger Bands, Moving Averages
+• Smart alerts for price movements and RSI extremes
+• Natural language interface through Claude Code
+
+🛠️ Tech Stack: Python, pandas, NumPy, yfinance, Rich
+
+The name "Clawdfolio" combines "Claude" and "Portfolio" - and it's the only project with this name on GitHub, making it easy to find!
+
+🔗 GitHub: https://github.com/2165187809-AXE/clawdfolio
+
+I'd love to hear your feedback. If you find it useful, a ⭐ star on GitHub would be greatly appreciated!
+
+#OpenSource #Python #FinTech #QuantitativeFinance #AI #ClaudeAI #Trading #RiskManagement #SoftwareEngineering
+```
+
+---
+
+## LinkedIn 帖子 (中文版)
+
+```
+🚀 开源项目发布：Clawdfolio - AI 驱动的投资组合监控工具
+
+作为一名热爱量化投资的软件工程师，我开发了 Clawdfolio —— 一个与 Claude Code 原生集成的智能投资组合监控工具。
+
+🎯 解决什么问题？
+
+在多个券商管理投资组合，同时追踪机构级风险指标是一件繁琐的事。现有工具要么太贵，要么缺乏 AI 集成。
+
+💡 核心功能：
+• 多券商数据聚合（长桥证券、富途牛牛）
+• 专业风险分析：VaR、夏普比率、Beta、最大回撤
+• 技术指标：RSI、布林带、均线系统
+• 智能警报：价格异动、RSI 超买超卖
+• 通过 Claude Code 自然语言交互
+
+🛠️ 技术栈：Python, pandas, NumPy, yfinance, Rich
+
+项目名 "Clawdfolio" = Claude + Portfolio，在 GitHub 上是唯一的，搜索直达！
+
+🔗 GitHub: https://github.com/2165187809-AXE/clawdfolio
+
+欢迎试用和反馈，如果觉得有用，请给个 ⭐ Star 支持！
+
+#开源 #Python #金融科技 #量化投资 #人工智能 #软件工程 #风险管理
+```
+
+---
+
 ## 推广渠道清单
 
 | 平台 | 链接 | 状态 |
 |------|------|------|
+| LinkedIn | https://linkedin.com | ⬜ 待发布 |
 | Twitter/X | https://twitter.com | ⬜ 待发布 |
 | Reddit r/ClaudeAI | https://reddit.com/r/ClaudeAI | ⬜ 待发布 |
 | Reddit r/algotrading | https://reddit.com/r/algotrading | ⬜ 待发布 |
