@@ -1,0 +1,54 @@
+# Portfolio Monitor Configuration Example
+# Copy this file to config.yaml and customize
+
+brokers:
+  # Longport (Longbridge) configuration
+  longport:
+    enabled: true
+    env_prefix: LONGPORT_  # Uses LONGPORT_APP_KEY, LONGPORT_APP_SECRET, etc.
+    timeout: 30
+
+  # Moomoo/Futu configuration
+  futu:
+    enabled: true
+    env_prefix: FUTU_
+    timeout: 30
+    extra:
+      host: "127.0.0.1"  # OpenD host
+      port: 11111        # OpenD port
+
+  # Demo broker (for testing)
+  demo:
+    enabled: true
+
+# Alert configuration
+alerts:
+  pnl_trigger: 500.0           # P&L alert threshold (USD)
+  pnl_step: 500.0              # P&L alert step (USD)
+  rsi_high: 80                 # RSI overbought threshold
+  rsi_low: 20                  # RSI oversold threshold
+  rsi_step: 2                  # RSI alert step
+  single_stock_threshold_top10: 0.05   # 5% for top 10 holdings
+  single_stock_threshold_other: 0.10   # 10% for other holdings
+  move_step: 0.01              # Price move alert step
+  concentration_threshold: 0.25 # Single position concentration warning
+
+# General settings
+currency: USD
+timezone: America/New_York
+cache_ttl: 300  # 5 minutes
+
+# Leveraged ETF mappings for intelligent alerts
+leveraged_etfs:
+  TQQQ: ["QQQ", 3, "Nasdaq 100"]
+  SQQQ: ["QQQ", -3, "Nasdaq 100"]
+  UPRO: ["SPY", 3, "S&P 500"]
+  SPXU: ["SPY", -3, "S&P 500"]
+  TNA: ["IWM", 3, "Russell 2000"]
+  TZA: ["IWM", -3, "Russell 2000"]
+  SOXL: ["SOXX", 3, "Semiconductors"]
+  SOXS: ["SOXX", -3, "Semiconductors"]
+
+# Output settings
+output_format: console  # console or json
+verbose: false
