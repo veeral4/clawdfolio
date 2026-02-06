@@ -4,8 +4,8 @@ from decimal import Decimal
 
 import pytest
 
-from portfolio_monitor.brokers.registry import clear_registry
-from portfolio_monitor.core.types import (
+from clawdfolio.brokers.registry import clear_registry
+from clawdfolio.core.types import (
     Exchange,
     Portfolio,
     Position,
@@ -115,7 +115,7 @@ def clean_registry():
 def demo_broker():
     """Provide a demo broker instance."""
     # Import to ensure registration
-    from portfolio_monitor.brokers import get_broker
+    from clawdfolio.brokers import get_broker
 
     broker = get_broker("demo")
     broker.connect()

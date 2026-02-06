@@ -17,7 +17,7 @@ class BaseBroker(ABC):
     the required abstract methods.
 
     Example:
-        >>> from portfolio_monitor.brokers import BaseBroker, register_broker
+        >>> from clawdfolio.brokers import BaseBroker, register_broker
         >>>
         >>> @register_broker("my_broker")
         >>> class MyBroker(BaseBroker):

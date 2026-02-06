@@ -2,18 +2,18 @@
 
 import numpy as np
 
-from portfolio_monitor.analysis.concentration import (
+from clawdfolio.analysis.concentration import (
     calculate_concentration,
     calculate_hhi,
 )
-from portfolio_monitor.analysis.risk import (
+from clawdfolio.analysis.risk import (
     calculate_beta,
     calculate_max_drawdown,
     calculate_sharpe_ratio,
     calculate_var,
     calculate_volatility,
 )
-from portfolio_monitor.analysis.technical import (
+from clawdfolio.analysis.technical import (
     calculate_bollinger_bands,
     calculate_ema,
     calculate_rsi,

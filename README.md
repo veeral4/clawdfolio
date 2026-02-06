@@ -1,22 +1,22 @@
-# Portfolio Monitor
+# Clawdfolio 🦙📊
 
-[![CI](https://github.com/2165187809-AXE/portfolio-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/2165187809-AXE/portfolio-monitor/actions/workflows/ci.yml)
+[![CI](https://github.com/2165187809-AXE/clawdfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/2165187809-AXE/clawdfolio/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://github.com/anthropics/claude-code)
 
 English | [中文](README_CN.md)
 
-> **Real-time portfolio monitoring and risk analytics for professional investors.**
+> **AI-powered portfolio monitoring for the Claude Code ecosystem.**
 >
-> A Claude Code Skill that aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts.
+> The ultimate Claude Code Skill for investors - aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts.
 
 ---
 
-## Why Portfolio Monitor?
+## Why Clawdfolio?
 
-| Traditional Tools | Portfolio Monitor |
-|-------------------|-------------------|
+| Traditional Tools | Clawdfolio |
+|-------------------|------------|
 | Manual data entry | Auto-sync from brokers |
 | Basic P&L tracking | VaR, Sharpe, Beta, Max Drawdown |
 | Single broker view | Multi-broker aggregation |
@@ -44,33 +44,33 @@ English | [中文](README_CN.md)
 Simply ask Claude Code:
 
 ```
-/portfolio summary
-/portfolio risk
-/portfolio quotes AAPL MSFT NVDA
-/portfolio alerts
+/clawdfolio summary
+/clawdfolio risk
+/clawdfolio quotes AAPL MSFT NVDA
+/clawdfolio alerts
 ```
 
 ### CLI Installation
 
 ```bash
 # Basic
-pip install portfolio-monitor
+pip install clawdfolio
 
 # With broker support
-pip install portfolio-monitor[longport]  # Longport
-pip install portfolio-monitor[futu]      # Moomoo/Futu
-pip install portfolio-monitor[all]       # All brokers
+pip install clawdfolio[longport]  # Longport
+pip install clawdfolio[futu]      # Moomoo/Futu
+pip install clawdfolio[all]       # All brokers
 ```
 
 ### CLI Usage
 
 ```bash
-portfolio-monitor summary              # Portfolio overview
-portfolio-monitor risk                 # Risk metrics
-portfolio-monitor quotes AAPL TSLA     # Real-time quotes
-portfolio-monitor alerts               # Check alerts
-portfolio-monitor earnings             # Upcoming earnings
-portfolio-monitor dca AAPL             # DCA analysis
+clawdfolio summary              # Portfolio overview
+clawdfolio risk                 # Risk metrics
+clawdfolio quotes AAPL TSLA     # Real-time quotes
+clawdfolio alerts               # Check alerts
+clawdfolio earnings             # Upcoming earnings
+clawdfolio dca AAPL             # DCA analysis
 ```
 
 ---
@@ -78,8 +78,8 @@ portfolio-monitor dca AAPL             # DCA analysis
 ## Python API
 
 ```python
-from portfolio_monitor.brokers import get_broker
-from portfolio_monitor.analysis import analyze_risk
+from clawdfolio.brokers import get_broker
+from clawdfolio.analysis import analyze_risk
 
 # Connect to broker
 broker = get_broker("demo")  # or "longport", "futu"
@@ -168,10 +168,10 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Links
 
-- [GitHub Repository](https://github.com/2165187809-AXE/portfolio-monitor)
-- [Report Issues](https://github.com/2165187809-AXE/portfolio-monitor/issues)
+- [GitHub Repository](https://github.com/2165187809-AXE/clawdfolio)
+- [Report Issues](https://github.com/2165187809-AXE/clawdfolio/issues)
 - [Claude Code](https://github.com/anthropics/claude-code)
 
 ---
 
-**If this project helps you, please give it a star!**
+**If Clawdfolio helps you, please give it a ⭐ star!**

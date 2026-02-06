@@ -1,4 +1,4 @@
-"""Portfolio Monitor - Multi-broker portfolio monitoring with risk analytics."""
+"""Clawdfolio - AI-powered portfolio monitoring for Claude Code."""
 
 __version__ = "1.0.0"
 __author__ = "YICHENG YANG"

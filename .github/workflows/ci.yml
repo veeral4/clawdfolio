@@ -32,11 +32,11 @@ jobs:
 
       - name: Type check with mypy
         run: |
-          mypy src/portfolio_monitor --ignore-missing-imports
+          mypy src/clawdfolio --ignore-missing-imports
 
       - name: Run tests
         run: |
-          pytest tests/ -v --cov=src/portfolio_monitor --cov-report=xml
+          pytest tests/ -v --cov=src/clawdfolio --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

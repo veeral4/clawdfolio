@@ -1,10 +1,12 @@
 ---
-name: portfolio-monitor
+name: clawdfolio
 version: 1.0.0
-description: Multi-broker portfolio monitoring with risk analytics
+description: AI-powered portfolio monitoring for Claude Code - Multi-broker support with professional risk analytics
 author: YICHENG YANG
 license: MIT
 keywords:
+  - claude-code
+  - ai
   - finance
   - portfolio
   - trading
@@ -23,9 +25,9 @@ optional_dependencies:
     - futu-api>=7.0.0
 ---
 
-# Portfolio Monitor
+# Clawdfolio 🦙📊
 
-Real-time portfolio monitoring and risk analysis for professional investors.
+AI-powered portfolio monitoring for professional investors in the Claude Code ecosystem.
 Supports multiple brokers including Longport (Longbridge) and Moomoo/Futu.
 
 ## Features
@@ -42,37 +44,37 @@ Supports multiple brokers including Longport (Longbridge) and Moomoo/Futu.
 
 ### Portfolio Summary
 ```
-/portfolio summary
+/clawdfolio summary
 ```
 Show portfolio overview with positions, P&L, and key metrics.
 
 ### Risk Analysis
 ```
-/portfolio risk
+/clawdfolio risk
 ```
 Display comprehensive risk metrics including volatility, beta, Sharpe ratio, and VaR.
 
 ### Get Quotes
 ```
-/portfolio quotes AAPL MSFT NVDA
+/clawdfolio quotes AAPL MSFT NVDA
 ```
 Fetch real-time quotes for specified symbols.
 
 ### Check Alerts
 ```
-/portfolio alerts
+/clawdfolio alerts
 ```
 Show current portfolio alerts (price moves, RSI extremes, etc.).
 
 ### Upcoming Earnings
 ```
-/portfolio earnings
+/clawdfolio earnings
 ```
 Display earnings calendar for portfolio holdings.
 
 ### DCA Analysis
 ```
-/portfolio dca AAPL --months 12 --amount 1000
+/clawdfolio dca AAPL --months 12 --amount 1000
 ```
 Analyze DCA performance for a symbol.
 
@@ -118,14 +120,14 @@ For Moomoo/Futu:
 
 ```bash
 # Basic installation
-pip install portfolio-monitor
+pip install clawdfolio
 
 # With Longport support
-pip install portfolio-monitor[longport]
+pip install clawdfolio[longport]
 
 # With Moomoo/Futu support
-pip install portfolio-monitor[futu]
+pip install clawdfolio[futu]
 
 # All brokers
-pip install portfolio-monitor[all]
+pip install clawdfolio[all]
 ```

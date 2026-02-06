@@ -2,14 +2,14 @@
 
 from datetime import date, time
 
-from portfolio_monitor.market.calendar import (
+from clawdfolio.market.calendar import (
     is_trading_day,
     is_weekend,
     next_trading_day,
     prev_trading_day,
     trading_days_between,
 )
-from portfolio_monitor.market.hours import (
+from clawdfolio.market.hours import (
     MarketHours,
     MarketStatus,
     get_market_status,

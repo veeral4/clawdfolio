@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Basic usage example for Portfolio Monitor."""
 
-from portfolio_monitor import load_config
-from portfolio_monitor.brokers import get_broker
-from portfolio_monitor.brokers.demo import DemoBroker  # noqa: F401 - registers broker
-from portfolio_monitor.analysis import analyze_risk, calculate_concentration
-from portfolio_monitor.monitors import PriceMonitor, EarningsMonitor
-from portfolio_monitor.output import print_portfolio, print_risk_metrics
+from clawdfolio import load_config
+from clawdfolio.brokers import get_broker
+from clawdfolio.brokers.demo import DemoBroker  # noqa: F401 - registers broker
+from clawdfolio.analysis import analyze_risk, calculate_concentration
+from clawdfolio.monitors import PriceMonitor, EarningsMonitor
+from clawdfolio.output import print_portfolio, print_risk_metrics
 
 
 def main():

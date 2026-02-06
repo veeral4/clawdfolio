@@ -2,12 +2,12 @@
 
 from decimal import Decimal
 
-from portfolio_monitor.core.config import Config, load_config
-from portfolio_monitor.core.exceptions import (
+from clawdfolio.core.config import Config, load_config
+from clawdfolio.core.exceptions import (
     BrokerError,
     PortfolioMonitorError,
 )
-from portfolio_monitor.core.types import (
+from clawdfolio.core.types import (
     Alert,
     AlertSeverity,
     AlertType,
@@ -160,7 +160,7 @@ class TestExceptions:
         assert "[longport]" in str(err)
         assert "Connection failed" in str(err)
 
-    def test_portfolio_monitor_error_inheritance(self):
+    def test_clawdfolio_error_inheritance(self):
         """Test exception inheritance."""
         err = BrokerError("test", "test message")
         assert isinstance(err, PortfolioMonitorError)

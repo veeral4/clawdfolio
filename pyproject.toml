@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "portfolio-monitor"
+name = "clawdfolio"
 version = "1.0.0"
-description = "Multi-broker portfolio monitoring with risk analytics"
+description = "AI-powered portfolio monitoring for Claude Code - Multi-broker support with professional risk analytics"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -13,6 +13,8 @@ authors = [
     { name = "YICHENG YANG" }
 ]
 keywords = [
+    "claude-code",
+    "ai",
     "finance",
     "portfolio",
     "trading",
@@ -67,16 +69,16 @@ dev = [
 ]
 
 [project.scripts]
-portfolio-monitor = "portfolio_monitor.cli.main:main"
+clawdfolio = "clawdfolio.cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/2165187809-AXE/portfolio-monitor"
-Documentation = "https://github.com/2165187809-AXE/portfolio-monitor#readme"
-Repository = "https://github.com/2165187809-AXE/portfolio-monitor.git"
-Issues = "https://github.com/2165187809-AXE/portfolio-monitor/issues"
+Homepage = "https://github.com/2165187809-AXE/clawdfolio"
+Documentation = "https://github.com/2165187809-AXE/clawdfolio#readme"
+Repository = "https://github.com/2165187809-AXE/clawdfolio.git"
+Issues = "https://github.com/2165187809-AXE/clawdfolio/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/portfolio_monitor"]
+packages = ["src/clawdfolio"]
 
 [tool.ruff]
 target-version = "py310"
@@ -99,7 +101,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["portfolio_monitor"]
+known-first-party = ["clawdfolio"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -115,7 +117,7 @@ pythonpath = ["src"]
 addopts = "-v --tb=short"
 
 [tool.coverage.run]
-source = ["src/portfolio_monitor"]
+source = ["src/clawdfolio"]
 branch = true
 
 [tool.coverage.report]

@@ -1,22 +1,22 @@
-# Portfolio Monitor 投资组合监控
+# Clawdfolio 🦙📊
 
-[![CI](https://github.com/2165187809-AXE/portfolio-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/2165187809-AXE/portfolio-monitor/actions/workflows/ci.yml)
+[![CI](https://github.com/2165187809-AXE/clawdfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/2165187809-AXE/clawdfolio/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-技能-blueviolet)](https://github.com/anthropics/claude-code)
 
 [English](README.md) | 中文
 
-> **专业投资者的实时投资组合监控与风险分析工具**
+> **为 Claude Code 生态打造的 AI 投资组合监控工具**
 >
-> 一个 Claude Code 原生技能，支持多券商持仓聚合、机构级风险指标计算和智能交易警报。
+> 投资者的终极 Claude Code 技能 - 支持多券商持仓聚合、机构级风险指标计算和智能交易警报。
 
 ---
 
-## 为什么选择 Portfolio Monitor？
+## 为什么选择 Clawdfolio？
 
-| 传统工具 | Portfolio Monitor |
-|----------|-------------------|
+| 传统工具 | Clawdfolio |
+|----------|------------|
 | 手动录入数据 | 自动同步券商数据 |
 | 简单盈亏统计 | VaR、夏普比率、Beta、最大回撤 |
 | 单一券商视图 | 多券商聚合 |
@@ -44,33 +44,33 @@
 直接在 Claude Code 中输入：
 
 ```
-/portfolio summary
-/portfolio risk
-/portfolio quotes AAPL MSFT NVDA
-/portfolio alerts
+/clawdfolio summary
+/clawdfolio risk
+/clawdfolio quotes AAPL MSFT NVDA
+/clawdfolio alerts
 ```
 
 ### 命令行安装
 
 ```bash
 # 基础安装
-pip install portfolio-monitor
+pip install clawdfolio
 
 # 带券商支持
-pip install portfolio-monitor[longport]  # 长桥
-pip install portfolio-monitor[futu]      # 富途
-pip install portfolio-monitor[all]       # 全部券商
+pip install clawdfolio[longport]  # 长桥
+pip install clawdfolio[futu]      # 富途
+pip install clawdfolio[all]       # 全部券商
 ```
 
 ### 命令行使用
 
 ```bash
-portfolio-monitor summary              # 持仓概览
-portfolio-monitor risk                 # 风险指标
-portfolio-monitor quotes AAPL TSLA     # 实时行情
-portfolio-monitor alerts               # 查看警报
-portfolio-monitor earnings             # 财报日历
-portfolio-monitor dca AAPL             # 定投分析
+clawdfolio summary              # 持仓概览
+clawdfolio risk                 # 风险指标
+clawdfolio quotes AAPL TSLA     # 实时行情
+clawdfolio alerts               # 查看警报
+clawdfolio earnings             # 财报日历
+clawdfolio dca AAPL             # 定投分析
 ```
 
 ---
@@ -78,8 +78,8 @@ portfolio-monitor dca AAPL             # 定投分析
 ## Python API
 
 ```python
-from portfolio_monitor.brokers import get_broker
-from portfolio_monitor.analysis import analyze_risk
+from clawdfolio.brokers import get_broker
+from clawdfolio.analysis import analyze_risk
 
 # 连接券商
 broker = get_broker("demo")  # 或 "longport", "futu"
@@ -168,10 +168,10 @@ MIT License - 查看 [LICENSE](LICENSE)
 
 ## 链接
 
-- [GitHub 仓库](https://github.com/2165187809-AXE/portfolio-monitor)
-- [问题反馈](https://github.com/2165187809-AXE/portfolio-monitor/issues)
+- [GitHub 仓库](https://github.com/2165187809-AXE/clawdfolio)
+- [问题反馈](https://github.com/2165187809-AXE/clawdfolio/issues)
 - [Claude Code](https://github.com/anthropics/claude-code)
 
 ---
 
-**如果这个项目对你有帮助，请给一个 Star！⭐**
+**如果 Clawdfolio 对你有帮助，请给一个 ⭐ Star！**

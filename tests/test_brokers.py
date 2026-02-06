@@ -3,15 +3,15 @@
 
 import pytest
 
-from portfolio_monitor.brokers.base import BaseBroker
-from portfolio_monitor.brokers.demo import DemoBroker
-from portfolio_monitor.brokers.registry import (
+from clawdfolio.brokers.base import BaseBroker
+from clawdfolio.brokers.demo import DemoBroker
+from clawdfolio.brokers.registry import (
     get_broker,
     list_brokers,
     register_broker,
     unregister_broker,
 )
-from portfolio_monitor.core.types import Exchange, Symbol
+from clawdfolio.core.types import Exchange, Symbol
 
 
 class TestBrokerRegistry:
@@ -48,7 +48,7 @@ class TestBrokerRegistry:
     def test_get_broker(self):
         """Test getting a registered broker."""
         # Register demo broker first
-        from portfolio_monitor.brokers.demo import DemoBroker  # noqa
+        from clawdfolio.brokers.demo import DemoBroker  # noqa
 
         broker = get_broker("demo")
         assert isinstance(broker, DemoBroker)
