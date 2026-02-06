@@ -1,6 +1,6 @@
 """Clawdfolio - AI-powered portfolio monitoring for Claude Code."""
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "YICHENG YANG"
 
 from .core.config import Config, load_config

@@ -1,4 +1,4 @@
-"""CLI entry point for Portfolio Monitor."""
+"""CLI entry point for Clawdfolio."""
 
 from __future__ import annotations
 
@@ -13,14 +13,14 @@ if TYPE_CHECKING:
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser."""
     parser = argparse.ArgumentParser(
-        prog="portfolio-monitor",
-        description="Multi-broker portfolio monitoring with risk analytics",
+        prog="clawdfolio",
+        description="AI-powered portfolio monitoring for Claude Code",
     )
 
     parser.add_argument(
         "--version",
         action="version",
-        version="%(prog)s 1.0.0",
+        version="%(prog)s 1.0.1",
     )
 
     parser.add_argument(
@@ -277,7 +277,7 @@ def cmd_dca(args: Namespace) -> int:
     from ..strategies.dca import calculate_dca_performance
 
     if not args.symbol:
-        print("Usage: portfolio-monitor dca SYMBOL [--months N] [--amount N]")
+        print("Usage: clawdfolio dca SYMBOL [--months N] [--amount N]")
         return 1
 
     try:

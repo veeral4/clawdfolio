@@ -1,6 +1,6 @@
 ---
 name: clawdfolio
-version: 1.0.0
+version: 1.0.1
 description: AI-powered portfolio monitoring for Claude Code - Multi-broker support with professional risk analytics
 author: YICHENG YANG
 license: MIT
