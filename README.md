@@ -10,7 +10,7 @@ English | [中文](README_CN.md)
 
 > **AI-powered portfolio monitoring for the Clawdbot ecosystem.**
 >
-> A production-oriented Clawdbot finance skill - aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts with production-grade data reliability. Its option methodology is documented from authoritative materials, rigorous backtesting, and multi-year live trading practice.
+> A production-oriented Clawdbot finance skill - aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts with production-grade data reliability. Its options methodology is synthesized from authoritative books and courses, validated through rigorous backtesting, and refined in multi-year live trading.
 
 ---
 
@@ -44,7 +44,7 @@ English | [中文](README_CN.md)
 ## What's New in v2.1.0
 
 - **Dedicated options strategy documentation** - Added `docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md` as the canonical playbook for CC and Sell Put
-- **Research-to-execution alignment** - Formalized a framework distilled from authoritative options study, data-driven backtesting, and multi-year live trading
+- **Research-to-execution alignment** - Formalized a framework synthesized from authoritative options books and courses, data-driven backtesting, and multi-year live trading
 - **Risk-first policy upgrade** - Added explicit gamma-risk, margin, leverage, roll, assignment, and pause-condition decision rules
 - **Feature mapping clarity** - Connected strategy decisions to `clawdfolio options` and `clawdfolio finance` workflows
 
