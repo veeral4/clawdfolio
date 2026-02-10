@@ -7,9 +7,14 @@ from .calendar import (
     trading_days_between,
 )
 from .data import (
+    OptionChainData,
+    OptionQuoteData,
     get_earnings_date,
     get_history,
     get_news,
+    get_option_chain,
+    get_option_expiries,
+    get_option_quote,
     get_price,
     get_quotes_yfinance,
     get_sector,
@@ -41,6 +46,11 @@ __all__ = [
     "get_quotes_yfinance",
     "get_news",
     "get_earnings_date",
+    "get_option_quote",
+    "get_option_chain",
+    "get_option_expiries",
+    "OptionQuoteData",
+    "OptionChainData",
     "get_sector",
     "risk_free_rate",
 ]

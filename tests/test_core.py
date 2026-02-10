@@ -150,6 +150,36 @@ class TestConfig:
         data = config.to_dict()
         assert data["currency"] == "EUR"
 
+    def test_option_buyback_config_roundtrip(self):
+        """Test option buyback config parsing and serialization."""
+        data = {
+            "option_buyback": {
+                "enabled": True,
+                "symbol": "TQQQ",
+                "state_path": "/tmp/option_buyback_state.json",
+                "targets": [
+                    {
+                        "name": "target1",
+                        "strike": 60,
+                        "expiry": "2026-06-18",
+                        "type": "C",
+                        "trigger_price": 1.6,
+                        "qty": 2,
+                        "reset_pct": 0.2,
+                    }
+                ],
+            }
+        }
+        config = Config.from_dict(data)
+        assert config.option_buyback.enabled is True
+        assert config.option_buyback.symbol == "TQQQ"
+        assert len(config.option_buyback.targets) == 1
+        assert config.option_buyback.targets[0].option_type == "C"
+
+        back = config.to_dict()
+        assert back["option_buyback"]["enabled"] is True
+        assert back["option_buyback"]["targets"][0]["type"] == "C"
+
 
 class TestExceptions:
     """Tests for custom exceptions."""

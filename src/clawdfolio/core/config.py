@@ -39,6 +39,29 @@ class BrokerConfig:
 
 
 @dataclass
+class OptionBuybackTargetConfig:
+    """Single option buyback target."""
+
+    name: str
+    strike: float
+    expiry: str
+    option_type: str = "C"
+    trigger_price: float = 0.0
+    qty: int = 1
+    reset_pct: float = 0.20
+
+
+@dataclass
+class OptionBuybackConfig:
+    """Option buyback monitor configuration."""
+
+    enabled: bool = False
+    symbol: str = "TQQQ"
+    targets: list[OptionBuybackTargetConfig] = field(default_factory=list)
+    state_path: str = "~/.cache/clawdfolio/option_buyback_state.json"
+
+
+@dataclass
 class Config:
     """Main configuration for Portfolio Monitor."""
 
@@ -55,6 +78,9 @@ class Config:
 
     # Leveraged ETF mappings for smart alerts
     leveraged_etfs: dict[str, tuple[str, int, str]] = field(default_factory=dict)
+
+    # Option buyback monitor settings
+    option_buyback: OptionBuybackConfig = field(default_factory=OptionBuybackConfig)
 
     # Output settings
     output_format: str = "console"  # console, json
@@ -95,6 +121,34 @@ class Config:
             if isinstance(info, list) and len(info) >= 3:
                 leveraged_etfs[etf] = (info[0], info[1], info[2])
 
+        option_buyback_data = data.get("option_buyback", {})
+        option_buyback_targets: list[OptionBuybackTargetConfig] = []
+        for item in option_buyback_data.get("targets", []):
+            if not isinstance(item, dict):
+                continue
+            option_buyback_targets.append(
+                OptionBuybackTargetConfig(
+                    name=str(item.get("name", f"target_{len(option_buyback_targets) + 1}")),
+                    strike=float(item.get("strike", 0.0)),
+                    expiry=str(item.get("expiry", "")),
+                    option_type=str(item.get("type", item.get("option_type", "C"))).upper(),
+                    trigger_price=float(item.get("trigger_price", 0.0)),
+                    qty=int(item.get("qty", 1)),
+                    reset_pct=float(item.get("reset_pct", 0.20)),
+                )
+            )
+        option_buyback = OptionBuybackConfig(
+            enabled=bool(option_buyback_data.get("enabled", bool(option_buyback_targets))),
+            symbol=str(option_buyback_data.get("symbol", "TQQQ")),
+            targets=option_buyback_targets,
+            state_path=str(
+                option_buyback_data.get(
+                    "state_path",
+                    "~/.cache/clawdfolio/option_buyback_state.json",
+                )
+            ),
+        )
+
         return cls(
             brokers=brokers,
             alerts=alerts,
@@ -102,6 +156,7 @@ class Config:
             timezone=data.get("timezone", "America/New_York"),
             cache_ttl=data.get("cache_ttl", 300),
             leveraged_etfs=leveraged_etfs,
+            option_buyback=option_buyback,
             output_format=data.get("output_format", "console"),
             verbose=data.get("verbose", False),
         )
@@ -134,6 +189,23 @@ class Config:
             "cache_ttl": self.cache_ttl,
             "leveraged_etfs": {
                 etf: list(info) for etf, info in self.leveraged_etfs.items()
+            },
+            "option_buyback": {
+                "enabled": self.option_buyback.enabled,
+                "symbol": self.option_buyback.symbol,
+                "state_path": self.option_buyback.state_path,
+                "targets": [
+                    {
+                        "name": target.name,
+                        "strike": target.strike,
+                        "expiry": target.expiry,
+                        "type": target.option_type,
+                        "trigger_price": target.trigger_price,
+                        "qty": target.qty,
+                        "reset_pct": target.reset_pct,
+                    }
+                    for target in self.option_buyback.targets
+                ],
             },
             "output_format": self.output_format,
             "verbose": self.verbose,

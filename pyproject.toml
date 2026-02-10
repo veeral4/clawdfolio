@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "clawdfolio"
-version = "1.0.2"
-description = "AI-powered portfolio monitoring for Claude Code with production-grade broker/market data reliability and professional risk analytics"
+version = "1.1.0"
+description = "AI-powered portfolio monitoring for Claude Code with production-grade broker/market data reliability, option analytics, and risk intelligence"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -21,6 +21,8 @@ keywords = [
     "risk-analysis",
     "investment",
     "stocks",
+    "options",
+    "greeks",
     "broker",
     "longport",
     "moomoo",

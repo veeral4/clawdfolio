@@ -1,6 +1,6 @@
-"""Clawdfolio - AI portfolio monitoring with production-grade data reliability."""
+"""Clawdfolio - AI portfolio monitoring with options and production-grade data reliability."""
 
-__version__ = "1.0.2"
+__version__ = "1.1.0"
 __author__ = "YICHENG YANG"
 
 from .core.config import Config, load_config

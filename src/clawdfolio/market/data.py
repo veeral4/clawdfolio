@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import socket
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -199,6 +200,51 @@ class NewsItem:
     ticker: str = ""
 
 
+@dataclass
+class OptionQuoteData:
+    """Option quote with optional Greeks."""
+
+    ticker: str
+    expiry: str
+    strike: float
+    option_type: str = "C"
+    bid: float | None = None
+    ask: float | None = None
+    last: float | None = None
+    implied_volatility: float | None = None
+    delta: float | None = None
+    gamma: float | None = None
+    theta: float | None = None
+    vega: float | None = None
+    rho: float | None = None
+    open_interest: float | None = None
+    volume: float | None = None
+    source: str = ""
+
+    @property
+    def ref_price(self) -> float | None:
+        """Reference price used for trigger checks."""
+        if self.last is not None and self.last > 0:
+            return self.last
+        if self.bid is not None and self.ask is not None and self.bid > 0 and self.ask > 0:
+            return (self.bid + self.ask) / 2
+        if self.bid is not None and self.bid > 0:
+            return self.bid
+        if self.ask is not None and self.ask > 0:
+            return self.ask
+        return None
+
+
+@dataclass
+class OptionChainData:
+    """Lightweight option chain representation."""
+
+    ticker: str
+    expiry: str
+    calls: pd.DataFrame
+    puts: pd.DataFrame
+
+
 def get_news(ticker: str, max_items: int = 5) -> list[NewsItem]:
     """Get recent news for a ticker."""
     yf = _import_yf()
@@ -246,6 +292,242 @@ def get_news(ticker: str, max_items: int = 5) -> list[NewsItem]:
                 ticker=ticker,
             ))
         return result
+    except Exception:
+        return []
+
+
+def _moomoo_available(host: str = "127.0.0.1", port: int = 11111) -> bool:
+    """Check if moomoo OpenD is reachable."""
+    try:
+        with socket.create_connection((host, port), timeout=2.0):
+            return True
+    except Exception:
+        return False
+
+
+def _moomoo_option_code(
+    ticker: str,
+    expiry: str,
+    strike: float,
+    option_type: str = "C",
+) -> str:
+    """Build moomoo option symbol, e.g. US.TQQQ260618C60000."""
+    dt = datetime.strptime(expiry, "%Y-%m-%d")
+    return f"US.{ticker}{dt.strftime('%y%m%d')}{option_type.upper()}{int(round(strike * 1000))}"
+
+
+def _safe_float(value: Any, default: float | None = None) -> float | None:
+    """Convert to float with NaN handling."""
+    try:
+        num = float(value)
+        return num if num == num else default
+    except Exception:
+        return default
+
+
+def _get_option_quote_moomoo(
+    ticker: str,
+    expiry: str,
+    strike: float,
+    option_type: str = "C",
+) -> OptionQuoteData | None:
+    """Fetch a single option quote + Greeks from moomoo."""
+    if not _moomoo_available():
+        return None
+
+    try:
+        from futu.common import ft_logger
+
+        ft_logger.logger.console_level = 50
+
+        from futu import RET_OK, OpenQuoteContext
+
+        code = _moomoo_option_code(ticker, expiry, strike, option_type)
+        ctx = OpenQuoteContext(host="127.0.0.1", port=11111)
+        try:
+            ret, data = ctx.get_market_snapshot(code_list=[code])
+            if ret != RET_OK or data is None or data.empty:
+                return None
+
+            row = data.iloc[0]
+            bid = _safe_float(row.get("bid_price"))
+            ask = _safe_float(row.get("ask_price"))
+            last = _safe_float(row.get("last_price"))
+            if bid is None and ask is None and last is None:
+                return None
+
+            return OptionQuoteData(
+                ticker=ticker,
+                expiry=expiry,
+                strike=strike,
+                option_type=option_type.upper(),
+                bid=bid,
+                ask=ask,
+                last=last,
+                implied_volatility=_safe_float(row.get("option_implied_volatility")),
+                delta=_safe_float(row.get("option_delta")),
+                gamma=_safe_float(row.get("option_gamma")),
+                theta=_safe_float(row.get("option_theta")),
+                vega=_safe_float(row.get("option_vega")),
+                rho=_safe_float(row.get("option_rho")),
+                open_interest=_safe_float(row.get("option_open_interest")),
+                volume=_safe_float(row.get("volume")),
+                source="moomoo",
+            )
+        finally:
+            ctx.close()
+    except Exception:
+        return None
+
+
+def get_option_quote(
+    ticker: str,
+    expiry: str,
+    strike: float,
+    option_type: str = "C",
+) -> OptionQuoteData | None:
+    """Get option quote with Greeks. moomoo first, yfinance fallback."""
+    opt = option_type.upper()
+    key = f"opt_quote:{ticker}:{expiry}:{strike}:{opt}"
+
+    def _fetch() -> OptionQuoteData | None:
+        quote = _get_option_quote_moomoo(ticker, expiry, strike, opt)
+        if quote is not None:
+            return quote
+
+        yf = _import_yf()
+        sym = ticker.replace(".", "-")
+        try:
+            chain = yf.Ticker(sym).option_chain(expiry)
+            table = chain.calls if opt == "C" else chain.puts
+            row = table.loc[table["strike"] == strike].head(1)
+            if row.empty:
+                return None
+
+            r = row.iloc[0]
+            return OptionQuoteData(
+                ticker=ticker,
+                expiry=expiry,
+                strike=strike,
+                option_type=opt,
+                bid=_safe_float(r.get("bid")),
+                ask=_safe_float(r.get("ask")),
+                last=_safe_float(r.get("lastPrice")),
+                implied_volatility=_safe_float(r.get("impliedVolatility")),
+                open_interest=_safe_float(r.get("openInterest")),
+                volume=_safe_float(r.get("volume")),
+                source="yfinance",
+            )
+        except Exception:
+            return None
+
+    return _cached(key, 300, _fetch)
+
+
+def _get_option_chain_moomoo(ticker: str, expiry: str) -> OptionChainData | None:
+    """Fetch full option chain from moomoo with quotes + Greeks."""
+    if not _moomoo_available():
+        return None
+
+    try:
+        from futu.common import ft_logger
+
+        ft_logger.logger.console_level = 50
+
+        from futu import RET_OK, OpenQuoteContext
+
+        ctx = OpenQuoteContext(host="127.0.0.1", port=11111)
+        try:
+            ret, chain = ctx.get_option_chain(code=f"US.{ticker}", start=expiry, end=expiry)
+            if ret != RET_OK or chain is None or chain.empty:
+                return None
+
+            codes = chain["code"].tolist()
+            if not codes:
+                return None
+
+            ret, snap = ctx.get_market_snapshot(code_list=codes)
+            if ret != RET_OK or snap is None or snap.empty:
+                return None
+
+            calls_data: list[dict[str, Any]] = []
+            puts_data: list[dict[str, Any]] = []
+            for _, row in snap.iterrows():
+                entry = {
+                    "contractSymbol": row.get("code", ""),
+                    "strike": _safe_float(row.get("option_strike_price"), 0),
+                    "bid": _safe_float(row.get("bid_price")),
+                    "ask": _safe_float(row.get("ask_price")),
+                    "lastPrice": _safe_float(row.get("last_price")),
+                    "volume": _safe_float(row.get("volume"), 0),
+                    "openInterest": _safe_float(row.get("option_open_interest"), 0),
+                    "impliedVolatility": _safe_float(row.get("option_implied_volatility")),
+                    "delta": _safe_float(row.get("option_delta")),
+                    "gamma": _safe_float(row.get("option_gamma")),
+                    "theta": _safe_float(row.get("option_theta")),
+                    "vega": _safe_float(row.get("option_vega")),
+                }
+                opt_type = str(row.get("option_type", "")).upper()
+                if opt_type == "CALL":
+                    calls_data.append(entry)
+                elif opt_type == "PUT":
+                    puts_data.append(entry)
+
+            calls_df = (
+                pd.DataFrame(calls_data).sort_values("strike").reset_index(drop=True)
+                if calls_data
+                else pd.DataFrame()
+            )
+            puts_df = (
+                pd.DataFrame(puts_data).sort_values("strike").reset_index(drop=True)
+                if puts_data
+                else pd.DataFrame()
+            )
+            return OptionChainData(ticker=ticker, expiry=expiry, calls=calls_df, puts=puts_df)
+        finally:
+            ctx.close()
+    except Exception:
+        return None
+
+
+def get_option_chain(ticker: str, expiry: str) -> OptionChainData | None:
+    """Get option chain for a ticker and expiry date. moomoo first, yfinance fallback."""
+    key = f"opt_chain:{ticker}:{expiry}"
+
+    def _fetch() -> OptionChainData | None:
+        chain = _get_option_chain_moomoo(ticker, expiry)
+        if chain is not None:
+            return chain
+
+        yf = _import_yf()
+        sym = ticker.replace(".", "-")
+        try:
+            raw_chain = yf.Ticker(sym).option_chain(expiry)
+            calls = raw_chain.calls if hasattr(raw_chain, "calls") else pd.DataFrame()
+            puts = raw_chain.puts if hasattr(raw_chain, "puts") else pd.DataFrame()
+            if calls is None:
+                calls = pd.DataFrame()
+            if puts is None:
+                puts = pd.DataFrame()
+            return OptionChainData(
+                ticker=ticker,
+                expiry=expiry,
+                calls=calls.reset_index(drop=True),
+                puts=puts.reset_index(drop=True),
+            )
+        except Exception:
+            return None
+
+    return _cached(key, 300, _fetch)
+
+
+def get_option_expiries(ticker: str) -> list[str]:
+    """Get available option expiry dates for ticker."""
+    yf = _import_yf()
+    sym = ticker.replace(".", "-")
+    try:
+        expiries = yf.Ticker(sym).options
+        return list(expiries) if expiries else []
     except Exception:
         return []
 

@@ -14,13 +14,13 @@ def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser."""
     parser = argparse.ArgumentParser(
         prog="clawdfolio",
-        description="AI portfolio monitoring for Claude Code with production-grade data reliability",
+        description="AI portfolio monitoring for Claude Code with options and production-grade data reliability",
     )
 
     parser.add_argument(
         "--version",
         action="version",
-        version="%(prog)s 1.0.2",
+        version="%(prog)s 1.1.0",
     )
 
     parser.add_argument(
@@ -107,6 +107,79 @@ def create_parser() -> argparse.ArgumentParser:
         type=float,
         default=1000.0,
         help="Monthly DCA amount (default: 1000)",
+    )
+
+    # Options command
+    options_parser = subparsers.add_parser(
+        "options",
+        help="Option quote, chain, expiry list, and buyback monitor",
+    )
+    options_subparsers = options_parser.add_subparsers(
+        dest="options_command",
+        help="Options subcommands",
+    )
+
+    options_quote_parser = options_subparsers.add_parser(
+        "quote",
+        help="Get single option quote with Greeks",
+    )
+    options_quote_parser.add_argument("symbol", help="Underlying ticker, e.g. TQQQ")
+    options_quote_parser.add_argument(
+        "--expiry",
+        required=True,
+        help="Expiry date (YYYY-MM-DD)",
+    )
+    options_quote_parser.add_argument(
+        "--strike",
+        required=True,
+        type=float,
+        help="Strike price",
+    )
+    options_quote_parser.add_argument(
+        "--type",
+        dest="option_type",
+        choices=["C", "P", "c", "p"],
+        default="C",
+        help="Option type: C or P",
+    )
+
+    options_chain_parser = options_subparsers.add_parser(
+        "chain",
+        help="Get option chain snapshot",
+    )
+    options_chain_parser.add_argument("symbol", help="Underlying ticker, e.g. TQQQ")
+    options_chain_parser.add_argument(
+        "--expiry",
+        required=True,
+        help="Expiry date (YYYY-MM-DD)",
+    )
+    options_chain_parser.add_argument(
+        "--side",
+        choices=["both", "calls", "puts"],
+        default="both",
+        help="Which side of chain to display",
+    )
+    options_chain_parser.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="Rows per side (default: 10)",
+    )
+
+    options_expiries_parser = options_subparsers.add_parser(
+        "expiries",
+        help="List available option expiries",
+    )
+    options_expiries_parser.add_argument("symbol", help="Underlying ticker, e.g. TQQQ")
+
+    options_buyback_parser = options_subparsers.add_parser(
+        "buyback",
+        help="Run buyback trigger check from config option_buyback.targets",
+    )
+    options_buyback_parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Exit with code 1 if no target is triggered",
     )
 
     return parser
@@ -312,6 +385,146 @@ def cmd_dca(args: Namespace) -> int:
         return 1
 
 
+def cmd_options(args: Namespace) -> int:
+    """Handle options command."""
+    import pandas as pd
+
+    from ..core.config import load_config
+    from ..market.data import get_option_chain, get_option_expiries, get_option_quote
+    from ..monitors.options import OptionBuybackMonitor, format_buyback_report
+    from ..output.json import to_json
+
+    if args.options_command is None:
+        print("Usage: clawdfolio options [quote|chain|expiries|buyback] ...")
+        return 1
+
+    if args.options_command == "expiries":
+        expiries = get_option_expiries(args.symbol)
+        if args.output == "json":
+            print(to_json({"symbol": args.symbol, "expiries": expiries}))
+        else:
+            if not expiries:
+                print(f"No option expiries found for {args.symbol}.")
+            else:
+                print(f"Option expiries for {args.symbol}:")
+                for exp in expiries:
+                    print(f"- {exp}")
+        return 0
+
+    if args.options_command == "quote":
+        quote = get_option_quote(
+            args.symbol,
+            args.expiry,
+            float(args.strike),
+            option_type=args.option_type.upper(),
+        )
+        if quote is None:
+            print(
+                f"Could not fetch option quote for {args.symbol} {args.expiry} "
+                f"{args.option_type.upper()}{args.strike}",
+                file=sys.stderr,
+            )
+            return 1
+        if args.output == "json":
+            print(to_json(quote))
+        else:
+            print(f"Option quote: {args.symbol} {args.expiry} {quote.option_type}{int(quote.strike)}")
+            print(f"Source: {quote.source}")
+            print(f"Bid: {quote.bid}  Ask: {quote.ask}  Last: {quote.last}  Ref: {quote.ref_price}")
+            print(
+                "IV/Greeks: "
+                f"iv={quote.implied_volatility} delta={quote.delta} gamma={quote.gamma} "
+                f"theta={quote.theta} vega={quote.vega} rho={quote.rho}"
+            )
+            print(f"OI/Volume: oi={quote.open_interest} volume={quote.volume}")
+        return 0
+
+    if args.options_command == "chain":
+        chain = get_option_chain(args.symbol, args.expiry)
+        if chain is None:
+            print(
+                f"Could not fetch option chain for {args.symbol} {args.expiry}",
+                file=sys.stderr,
+            )
+            return 1
+
+        def _pick_columns(df: pd.DataFrame) -> pd.DataFrame:
+            wanted = [
+                "contractSymbol",
+                "strike",
+                "bid",
+                "ask",
+                "lastPrice",
+                "impliedVolatility",
+                "delta",
+                "gamma",
+                "theta",
+                "vega",
+                "openInterest",
+                "volume",
+            ]
+            if df is None or df.empty:
+                return pd.DataFrame(columns=wanted)
+            out = df.copy()
+            for col in wanted:
+                if col not in out.columns:
+                    out[col] = None
+            out = out[wanted]
+            if "strike" in out.columns:
+                out = out.sort_values("strike")
+            return out.head(max(int(args.limit), 1)).reset_index(drop=True)
+
+        calls = _pick_columns(chain.calls)
+        puts = _pick_columns(chain.puts)
+
+        if args.output == "json":
+            payload = {
+                "symbol": args.symbol,
+                "expiry": args.expiry,
+                "calls": calls.to_dict(orient="records"),
+                "puts": puts.to_dict(orient="records"),
+            }
+            if args.side == "calls":
+                payload["puts"] = []
+            elif args.side == "puts":
+                payload["calls"] = []
+            print(to_json(payload))
+        else:
+            print(f"Option chain: {args.symbol} {args.expiry}")
+            with pd.option_context("display.max_columns", 20, "display.width", 140):
+                if args.side in ("both", "calls"):
+                    print("\nCalls:")
+                    print(calls.to_string(index=False) if not calls.empty else "(empty)")
+                if args.side in ("both", "puts"):
+                    print("\nPuts:")
+                    print(puts.to_string(index=False) if not puts.empty else "(empty)")
+        return 0
+
+    if args.options_command == "buyback":
+        config = load_config(args.config)
+        monitor = OptionBuybackMonitor(config.option_buyback)
+        result = monitor.check()
+        if result is None:
+            print(
+                "Option buyback monitor is disabled or has no targets. "
+                "Set option_buyback.enabled=true and targets in config.",
+                file=sys.stderr,
+            )
+            return 1
+
+        if args.output == "json":
+            print(to_json(result))
+        else:
+            print(format_buyback_report(result))
+
+        if args.strict and not result.triggered:
+            return 1
+        return 0
+
+    print(f"Unknown options subcommand: {args.options_command}", file=sys.stderr)
+    return 1
+
+
 def main(argv: list[str] | None = None) -> int:
     """Main entry point."""
     parser = create_parser()
@@ -329,6 +542,7 @@ def main(argv: list[str] | None = None) -> int:
         "alerts": cmd_alerts,
         "earnings": cmd_earnings,
         "dca": cmd_dca,
+        "options": cmd_options,
     }
 
     handler = commands.get(args.command)

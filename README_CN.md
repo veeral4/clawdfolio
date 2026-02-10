@@ -34,15 +34,17 @@
 - **智能警报** - 价格异动、RSI 超买超卖、盈亏阈值
 - **财报日历** - 追踪持仓股票财报日期
 - **定投分析** - DCA 信号与绩效追踪
+- **期权工具集** - 期权报价/Greeks、期权链快照、回补触发监控
 
 ---
 
-## v1.0.2 最新优化
+## v1.1.0 最新优化
 
 - **金融可靠性同步** - 将实盘工作流中验证过的可靠性改进同步到 `clawdfolio`
 - **RSI 更贴近实盘** - RSI 计算切换为 **Wilder EMA 平滑**
 - **Longport 报价刷新修复** - 修复 `LongportBroker.get_positions()` 的 symbol 传递问题
 - **行情数据增强** - yfinance 单票/MultiIndex 历史数据标准化，并补齐 `prev_close` 回退逻辑
+- **期权能力迁移** - 新增期权报价/Greeks、期权链快照、配置驱动的回补触发监控
 - **CI 稳定性提升** - Python 3.10/3.11/3.12 的 lint/type/test 全链路稳定通过
 
 ---
@@ -81,6 +83,10 @@ clawdfolio quotes AAPL TSLA     # 实时行情
 clawdfolio alerts               # 查看警报
 clawdfolio earnings             # 财报日历
 clawdfolio dca AAPL             # 定投分析
+clawdfolio options expiries TQQQ
+clawdfolio options quote TQQQ --expiry 2026-06-18 --strike 60 --type C
+clawdfolio options chain TQQQ --expiry 2026-06-18 --side both --limit 10
+clawdfolio options buyback      # 按配置检查回补触发
 ```
 
 ---
@@ -150,6 +156,26 @@ alerts:
   pnl_trigger: 500.0
   rsi_high: 80
   rsi_low: 20
+
+option_buyback:
+  enabled: true
+  symbol: "TQQQ"
+  state_path: "~/.cache/clawdfolio/option_buyback_state.json"
+  targets:
+    - name: "target1"
+      strike: 60
+      expiry: "2026-06-18"
+      type: "C"
+      trigger_price: 1.60
+      qty: 2
+      reset_pct: 0.20
+    - name: "target2"
+      strike: 60
+      expiry: "2026-06-18"
+      type: "C"
+      trigger_price: 0.80
+      qty: 1
+      reset_pct: 0.20
 ```
 
 ---

@@ -34,15 +34,17 @@ English | [中文](README_CN.md)
 - **Smart Alerts** - Price movements, RSI extremes, P&L thresholds
 - **Earnings Calendar** - Track upcoming earnings for holdings
 - **DCA Analysis** - Dollar-cost averaging signals
+- **Options Toolkit** - Option quote/Greeks, option chain snapshot, buyback trigger monitor
 
 ---
 
-## What's New in v1.0.2
+## What's New in v1.1.0
 
 - **Finance reliability sync** - Ported proven reliability improvements from real production workflows
 - **More realistic RSI** - RSI now uses **Wilder EMA smoothing** for steadier signal quality
 - **Longport quote refresh fix** - Corrected symbol wiring in `LongportBroker.get_positions()`
 - **Market data hardening** - Better yfinance history normalization (single ticker + MultiIndex) and `prev_close` fallback
+- **Options migration** - Added option quote/Greeks, option chain snapshot, and config-driven buyback trigger monitor
 - **CI stability** - Full lint/type/test pipeline now passes consistently on Python 3.10/3.11/3.12
 
 ---
@@ -81,6 +83,10 @@ clawdfolio quotes AAPL TSLA     # Real-time quotes
 clawdfolio alerts               # Check alerts
 clawdfolio earnings             # Upcoming earnings
 clawdfolio dca AAPL             # DCA analysis
+clawdfolio options expiries TQQQ
+clawdfolio options quote TQQQ --expiry 2026-06-18 --strike 60 --type C
+clawdfolio options chain TQQQ --expiry 2026-06-18 --side both --limit 10
+clawdfolio options buyback      # Trigger check from config option_buyback.targets
 ```
 
 ---
@@ -150,6 +156,26 @@ alerts:
   pnl_trigger: 500.0
   rsi_high: 80
   rsi_low: 20
+
+option_buyback:
+  enabled: true
+  symbol: "TQQQ"
+  state_path: "~/.cache/clawdfolio/option_buyback_state.json"
+  targets:
+    - name: "target1"
+      strike: 60
+      expiry: "2026-06-18"
+      type: "C"
+      trigger_price: 1.60
+      qty: 2
+      reset_pct: 0.20
+    - name: "target2"
+      strike: 60
+      expiry: "2026-06-18"
+      type: "C"
+      trigger_price: 0.80
+      qty: 1
+      reset_pct: 0.20
 ```
 
 ---
