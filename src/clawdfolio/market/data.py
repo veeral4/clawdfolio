@@ -88,7 +88,7 @@ def get_history_multi(tickers: list[str], period: str = "1y") -> pd.DataFrame:
     """Get price history for multiple tickers. Cached 1 hour."""
     yf = _import_yf()
     syms = [t.replace(".", "-") for t in tickers]
-    sym_to_ticker = {sym: ticker for sym, ticker in zip(syms, tickers, strict=False)}
+    sym_to_ticker = dict(zip(syms, tickers, strict=False))
     key = f"hist_multi:{','.join(sorted(syms))}:{period}"
 
     def _fetch():
