@@ -10,7 +10,7 @@ English | [中文](README_CN.md)
 
 > **AI-powered portfolio monitoring for the Clawdbot ecosystem.**
 >
-> A production-oriented Clawdbot finance skill - aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts with production-grade data reliability.
+> A production-oriented Clawdbot finance skill - aggregates portfolios from multiple brokers, calculates institutional-grade risk metrics, and generates intelligent trading alerts with production-grade data reliability. Its option methodology is documented from self-study of authoritative materials, rigorous backtesting, and multi-year live trading practice.
 
 ---
 
@@ -36,7 +36,19 @@ English | [中文](README_CN.md)
 - **Earnings Calendar** - Track upcoming earnings for holdings
 - **DCA Analysis** - Dollar-cost averaging signals
 - **Options Toolkit** - Option quote/Greeks, option chain snapshot, buyback trigger monitor
+- **Options Strategy Playbook (v2.1)** - Dedicated methodology for Covered Call and Sell Put lifecycle management, with delta/gamma/margin guardrails
 - **Finance Workflow Suite (v2)** - 20 migrated production workflows from local `~/clawd/scripts`, categorized and runnable via `clawdfolio finance`
+
+---
+
+## What's New in v2.1.0
+
+- **Dedicated options strategy documentation** - Added `docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md` as the canonical playbook for CC and Sell Put
+- **Research-to-execution alignment** - Formalized a framework distilled from authoritative options study, data-driven backtesting, and multi-year live trading
+- **Risk-first policy upgrade** - Added explicit gamma-risk, margin, leverage, roll, assignment, and pause-condition decision rules
+- **Feature mapping clarity** - Connected strategy decisions to `clawdfolio options` and `clawdfolio finance` workflows
+
+Read the full playbook: `docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md`
 
 ---
 

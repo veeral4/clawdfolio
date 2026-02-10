@@ -1,7 +1,7 @@
 ---
 name: clawdfolio
-version: 2.0.0
-description: AI-powered portfolio monitoring for Clawdbot - Multi-broker support with professional risk analytics and finance workflows
+version: 2.1.0
+description: AI-powered portfolio monitoring for Clawdbot - Multi-broker support with professional risk analytics, option strategy playbook, and finance workflows
 author: YICHENG YANG
 license: MIT
 keywords:
@@ -40,6 +40,7 @@ Supports multiple brokers including Longport (Longbridge) and Moomoo/Futu.
 - **Price Alerts**: Automated alerts for significant price movements
 - **Earnings Calendar**: Track upcoming earnings for portfolio holdings
 - **DCA Signals**: Dollar-cost averaging analysis and buy-the-dip signals
+- **Options Strategy Playbook (v2.1)**: Structured CC/Sell Put methodology with delta/gamma/margin risk controls
 
 ## Commands
 
