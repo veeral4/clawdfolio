@@ -1,9 +1,10 @@
 """Shared test fixtures for clawdfolio."""
 
+from decimal import Decimal
+
 import pytest
 
-from clawdfolio.core.types import Exchange, Symbol, Position, Quote, Portfolio
-from decimal import Decimal
+from clawdfolio.core.types import Exchange, Portfolio, Position, Quote, Symbol
 
 
 @pytest.fixture

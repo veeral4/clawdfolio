@@ -3,14 +3,12 @@
 from decimal import Decimal
 
 from clawdfolio.core.types import (
+    Alert,
     AlertSeverity,
     AlertType,
     Exchange,
-    Symbol,
     Quote,
-    Position,
-    Portfolio,
-    Alert,
+    Symbol,
 )
 
 

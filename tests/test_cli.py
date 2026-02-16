@@ -3,8 +3,6 @@
 import subprocess
 import sys
 
-import pytest
-
 
 class TestCLI:
     def test_version_flag(self):
@@ -27,6 +25,7 @@ class TestCLI:
 
     def test_import(self):
         import clawdfolio
+
         assert hasattr(clawdfolio, "__version__")
         assert hasattr(clawdfolio, "Config")
         assert hasattr(clawdfolio, "Symbol")
