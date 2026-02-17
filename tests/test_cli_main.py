@@ -2,20 +2,9 @@
 
 from __future__ import annotations
 
-import json
-from io import StringIO
-from unittest.mock import patch
-
 import pytest
 
 from clawdfolio.cli.main import (
-    cmd_alerts,
-    cmd_dca,
-    cmd_earnings,
-    cmd_export,
-    cmd_performance,
-    cmd_snapshot,
-    cmd_summary,
     create_parser,
     main,
 )
@@ -53,7 +42,7 @@ class TestCreateParser:
         args = parser.parse_args(["export", "portfolio", "--format", "json"])
         assert args.command == "export"
         assert args.what == "portfolio"
-        assert getattr(args, "format") == "json"
+        assert args.format == "json"
 
     def test_parser_dca(self):
         parser = create_parser()

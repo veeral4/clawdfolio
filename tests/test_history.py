@@ -5,8 +5,6 @@ from __future__ import annotations
 from datetime import date, timedelta
 from decimal import Decimal
 
-import pytest
-
 from clawdfolio.core.history import (
     SnapshotRow,
     append_snapshot,
@@ -20,8 +18,8 @@ from clawdfolio.core.types import Exchange, Portfolio, Position, Symbol
 
 def _make_portfolio(**overrides) -> Portfolio:
     """Create a minimal portfolio for testing."""
-    defaults = dict(
-        positions=[
+    defaults = {
+        "positions": [
             Position(
                 symbol=Symbol(ticker="AAPL", exchange=Exchange.NASDAQ),
                 quantity=Decimal("10"),
@@ -29,12 +27,12 @@ def _make_portfolio(**overrides) -> Portfolio:
                 current_price=Decimal("175"),
             )
         ],
-        net_assets=Decimal("10000"),
-        market_value=Decimal("1750"),
-        cash=Decimal("8250"),
-        day_pnl=Decimal("50"),
-        day_pnl_pct=0.005,
-    )
+        "net_assets": Decimal("10000"),
+        "market_value": Decimal("1750"),
+        "cash": Decimal("8250"),
+        "day_pnl": Decimal("50"),
+        "day_pnl_pct": 0.005,
+    }
     defaults.update(overrides)
     return Portfolio(**defaults)
 

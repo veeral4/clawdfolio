@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from clawdfolio.market.hours import (
     MarketHours,
-    MarketSession,
     MarketStatus,
     _get_market_hours,
     get_market_status,
