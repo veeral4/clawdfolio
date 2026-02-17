@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 _yf = None
 
 
-def _import_yf():
+def _import_yf() -> Any:
     global _yf
     if _yf is None:
         import yfinance as yf
@@ -52,7 +52,7 @@ def set_default_ttl(ttl: float) -> None:
     _default_ttl = ttl
 
 
-def _cached(key: str, ttl: float, fn):
+def _cached(key: str, ttl: float, fn: Any) -> Any:
     """Return cached value if within TTL, else call fn and cache."""
     effective_ttl = min(ttl, _default_ttl) if _default_ttl is not None else ttl
     now = time.time()
@@ -72,7 +72,7 @@ def _cached(key: str, ttl: float, fn):
         with _cache_lock:
             if key in _cache:
                 ts, val = _cache[key]
-                if now - ts < ttl:
+                if now - ts < effective_ttl:
                     return val
         val = fn()
         with _cache_lock:
@@ -104,7 +104,7 @@ def get_price(ticker: str) -> float | None:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> float | None:
         try:
             t = yf.Ticker(sym)
             fi = getattr(t, "fast_info", None)
@@ -118,7 +118,7 @@ def get_price(ticker: str) -> float | None:
             logger.debug("Failed to get price for %s", sym, exc_info=True)
             return None
 
-    return _cached(f"price:{sym}", 300, _fetch)
+    return _cached(f"price:{sym}", 300, _fetch)  # type: ignore[no-any-return]
 
 
 def get_history(ticker: str, period: str = "1y") -> pd.DataFrame:
@@ -126,7 +126,7 @@ def get_history(ticker: str, period: str = "1y") -> pd.DataFrame:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> pd.DataFrame:
         try:
             df = yf.download(sym, period=period, interval="1d", progress=False, auto_adjust=True)
             # Handle MultiIndex columns from yfinance (e.g., ('Close', 'AAPL'))
@@ -148,7 +148,7 @@ def get_history_multi(tickers: list[str], period: str = "1y") -> pd.DataFrame:
     sym_to_ticker = dict(zip(syms, tickers, strict=False))
     key = f"hist_multi:{','.join(sorted(syms))}:{period}"
 
-    def _fetch():
+    def _fetch() -> pd.DataFrame:
         try:
             df = yf.download(syms, period=period, interval="1d", progress=False, auto_adjust=True)
             if df is None or df.empty:
@@ -186,13 +186,13 @@ def get_quote(ticker: str) -> Quote | None:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> Quote | None:
         return _get_quote_uncached(sym, ticker, yf)
 
-    return _cached(f"quote:{sym}", 300, _fetch)
+    return _cached(f"quote:{sym}", 300, _fetch)  # type: ignore[no-any-return]
 
 
-def _get_quote_uncached(sym: str, ticker: str, yf) -> Quote | None:
+def _get_quote_uncached(sym: str, ticker: str, yf: Any) -> Quote | None:
     """Internal uncached quote fetch."""
     try:
         t = yf.Ticker(sym)
@@ -547,7 +547,7 @@ def get_option_quote(
             logger.debug("yfinance option quote failed for %s", ticker, exc_info=True)
             return None
 
-    return _cached(key, 300, _fetch)
+    return _cached(key, 300, _fetch)  # type: ignore[no-any-return]
 
 
 def _get_option_chain_moomoo(ticker: str, expiry: str) -> OptionChainData | None:
@@ -646,7 +646,7 @@ def get_option_chain(ticker: str, expiry: str) -> OptionChainData | None:
             logger.debug("yfinance option chain failed for %s", ticker, exc_info=True)
             return None
 
-    return _cached(key, 300, _fetch)
+    return _cached(key, 300, _fetch)  # type: ignore[no-any-return]
 
 
 def get_option_expiries(ticker: str) -> list[str]:
@@ -654,7 +654,7 @@ def get_option_expiries(ticker: str) -> list[str]:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> list[str]:
         try:
             expiries = yf.Ticker(sym).options
             return list(expiries) if expiries else []
@@ -662,7 +662,7 @@ def get_option_expiries(ticker: str) -> list[str]:
             logger.debug("Failed to get option expiries for %s", sym, exc_info=True)
             return []
 
-    return _cached(f"opt_exp:{sym}", 3600, _fetch)
+    return _cached(f"opt_exp:{sym}", 3600, _fetch)  # type: ignore[no-any-return]
 
 
 # ---------------------------------------------------------------------------
@@ -714,13 +714,13 @@ def get_sector(ticker: str) -> str | None:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> str | None:
         try:
             return yf.Ticker(sym).info.get("sector") or None
         except Exception:
             return None
 
-    return _cached(f"sector:{sym}", 3600, _fetch)
+    return _cached(f"sector:{sym}", 3600, _fetch)  # type: ignore[no-any-return]
 
 
 def get_sector_and_industry(ticker: str) -> tuple[str, str]:
@@ -728,14 +728,14 @@ def get_sector_and_industry(ticker: str) -> tuple[str, str]:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> tuple[str, str]:
         try:
             info = yf.Ticker(sym).info
             return info.get("sector", ""), info.get("industry", "")
         except Exception:
             return "", ""
 
-    return _cached(f"sec_ind:{sym}", 3600, _fetch)
+    return _cached(f"sec_ind:{sym}", 3600, _fetch)  # type: ignore[no-any-return]
 
 
 def get_stock_info(ticker: str) -> dict[str, Any]:
@@ -743,7 +743,7 @@ def get_stock_info(ticker: str) -> dict[str, Any]:
     yf = _import_yf()
     sym = _yf_symbol(ticker)
 
-    def _fetch():
+    def _fetch() -> dict[str, Any]:
         try:
             info = yf.Ticker(sym).info
             return {
@@ -755,14 +755,14 @@ def get_stock_info(ticker: str) -> dict[str, Any]:
         except Exception:
             return {"name": ticker, "sector": "", "industry": "", "marketCap": 0}
 
-    return _cached(f"info:{sym}", 3600, _fetch)
+    return _cached(f"info:{sym}", 3600, _fetch)  # type: ignore[no-any-return]
 
 
 def risk_free_rate() -> float:
     """Get current 10Y Treasury yield from ^TNX. Falls back to 4.5%."""
     yf = _import_yf()
 
-    def _fetch():
+    def _fetch() -> float:
         try:
             t = yf.Ticker("^TNX")
             h = t.history(period="5d")
@@ -774,4 +774,4 @@ def risk_free_rate() -> float:
         except Exception:
             return 0.045
 
-    return _cached("risk_free_rate", 3600, _fetch)
+    return _cached("risk_free_rate", 3600, _fetch)  # type: ignore[no-any-return]
