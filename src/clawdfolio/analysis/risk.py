@@ -365,7 +365,4 @@ def analyze_risk(portfolio: Portfolio) -> RiskMetrics:
         corr_matrix = returns[available_tickers].corr()
         metrics.high_corr_pairs = find_high_correlations(corr_matrix, threshold=0.8)
 
-    # Portfolio RSI
-    metrics.rsi_portfolio = calculate_rsi(port_value)
-
     return metrics
